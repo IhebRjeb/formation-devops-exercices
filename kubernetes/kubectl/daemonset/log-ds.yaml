@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: log
+spec:
+  selector:
+    matchLabels:
+      app: log
+  template:
+    metadata:
+      labels:
+        app: log
+    spec:
+      containers:
+      - name: log
+        image: alpine
+        command: ["/bin/sh", "-c"]
+        args: ["tail -f /var/log/node/*.log"]
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log/node
+      volumes:
+      - name: varlog
+        hostPath:
+          path: /var/log
